@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+const Book = require('./models/books');
+
 const app = express();
 
 mongoose.connect(process.env.DB_URL)
@@ -17,118 +19,38 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/books', (req, res, next) => {
-  const books = [
-    {
-      _id: 'oeihfzeoi',
-      title: 'Milwaukee Mission',
-      author : 'Elder Cooper',
-      year: 2021,
-      genre: 'Policier',
-      imageUrl: '/images/Milwaukee_Mission.jpg',
-      //ratings : 
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Book for Esther',
-      author : 'Alabaster',
-      year: 2022,
-      genre: 'Paysage',
-      imageUrl: '/images/bookForEsther.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoi',
-      title: 'The Kinfolk Table',
-      author : 'Nathan Williams',
-      year: 2022,
-      genre: 'Cuisine',
-      imageUrl: '/images/theKinfolkTable.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeoi',
-      title: 'Thinking, Fast and Slow',
-      author : 'Daniel Kahneman',
-      year: 2022,
-      genre: 'Economie',
-      imageUrl: '/images/thinkingfast&slow.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Company of One',
-      author : 'Paul Jarvis',
-      year: 2022,
-      genre: 'Business',
-      imageUrl: '/images/Companyofone.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoi',
-      title: 'Design Anthology',
-      author : 'James Doe',
-      year: 2022,
-      genre: 'Architecture',
-      imageUrl: '/images/DesignAnthology.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeoi',
-      title: 'Book of Genesis',
-      author : 'Alabaster',
-      year: 2022,
-      genre: 'Jardinage',
-      imageUrl: '/images/BookofGenesis.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Psalms',
-      author : 'Alabaster',
-      year: 2022,
-      genre: 'Poésie',
-      imageUrl: '/images/Psalms.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoi',
-      title: 'Milk & Honey',
-      author : 'Rupi Kaur',
-      year: 2022,
-      genre: 'Ecologie',
-      imageUrl: '/images/Milk&Honey.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeoi',
-      title: 'Stupore e Tremori',
-      author : 'Amélie Nothomb',
-      year: 2018,
-      genre: 'Roman',
-      imageUrl: '/images/StuporeeTremori.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Cereal',
-      author : 'Van Duysen',
-      year: 2022,
-      genre: 'Architecture',
-      imageUrl: '/images/Cereal.jpg',
-      
-    },
-    {
-      _id: 'oeihfzeomoi',
-      title: 'Zero to One',
-      author : 'Peter Thiel',
-      year: 2022,
-      genre: 'Business',
-      imageUrl: '/images/zeroToOne.jpg',
-      
-    },
-  ];
-  res.status(200).json(books);
+app.post('/api/books', (req, res, next) => {
+    delete req.body._id;
+    const book = new Book({
+        ...req.body
+    });
+    book.save()
+        .then(() => res.status(201).json({ message: 'Livre enregistré !' }))
+        .catch((error) => res.status(400).json({ error }));
+});
+
+app.put('/api/books/:id', (req, res, next) => {
+    Book.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Livre modifié !' }))
+        .catch(error => res.status(400).json({ error }));
+});
+
+app.delete('/api/books/:id', (req, res, next) => {
+    Book.deleteOne({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Livre supprimé !' }))
+        .catch(error => res.status(400).json({ error }));
+});
+
+app.get('/api/books/:id', (req, res, next) => {
+    Book.findOne({ _id: req.params.id })
+        .then(book => res.status(200).json(book))
+        .catch(error => res.status(404).json({ error }));
+});
+
+app.get('/api/books', (req, res, next) => {
+  Book.find()
+    .then(books => res.status(200).json(books))
+    .catch(error => res.status(400).json({ error }));
 });
 
 module.exports = app;
