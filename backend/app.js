@@ -2,6 +2,8 @@ const express = require('express');
 
 const app = express();
 
+app.use(express.json());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -14,86 +16,110 @@ app.use('/api/books', (req, res, next) => {
     {
       _id: 'oeihfzeoi',
       title: 'Milwaukee Mission',
-      description: 'Les infos de mon premier objet',
+      author : 'Elder Cooper',
+      year: 2021,
+      genre: 'Policier',
       imageUrl: '/images/Milwaukee_Mission.jpg',
-      userId: 'qsomihvqios',
+      //ratings : 
     },
     {
       _id: 'oeihfzeomoihi',
       title: 'Book for Esther',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Alabaster',
+      year: 2022,
+      genre: 'Paysage',
       imageUrl: '/images/bookForEsther.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoi',
       title: 'The Kinfolk Table',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Nathan Williams',
+      year: 2022,
+      genre: 'Cuisine',
       imageUrl: '/images/theKinfolkTable.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeoi',
       title: 'Thinking, Fast and Slow',
-      description: 'Les infos de mon premier objet',
+      author : 'Daniel Kahneman',
+      year: 2022,
+      genre: 'Economie',
       imageUrl: '/images/thinkingfast&slow.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoihi',
       title: 'Company of One',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Paul Jarvis',
+      year: 2022,
+      genre: 'Business',
       imageUrl: '/images/Companyofone.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoi',
       title: 'Design Anthology',
-      description: 'Les infos de mon deuxième objet',
+      author : 'James Doe',
+      year: 2022,
+      genre: 'Architecture',
       imageUrl: '/images/DesignAnthology.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeoi',
       title: 'Book of Genesis',
-      description: 'Les infos de mon premier objet',
+      author : 'Alabaster',
+      year: 2022,
+      genre: 'Jardinage',
       imageUrl: '/images/BookofGenesis.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoihi',
       title: 'Psalms',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Alabaster',
+      year: 2022,
+      genre: 'Poésie',
       imageUrl: '/images/Psalms.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoi',
       title: 'Milk & Honey',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Rupi Kaur',
+      year: 2022,
+      genre: 'Ecologie',
       imageUrl: '/images/Milk&Honey.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeoi',
       title: 'Stupore e Tremori',
-      description: 'Les infos de mon premier objet',
+      author : 'Amélie Nothomb',
+      year: 2018,
+      genre: 'Roman',
       imageUrl: '/images/StuporeeTremori.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoihi',
       title: 'Cereal',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Van Duysen',
+      year: 2022,
+      genre: 'Architecture',
       imageUrl: '/images/Cereal.jpg',
-      userId: 'qsomihvqios',
+      
     },
     {
       _id: 'oeihfzeomoi',
       title: 'Zero to One',
-      description: 'Les infos de mon deuxième objet',
+      author : 'Peter Thiel',
+      year: 2022,
+      genre: 'Business',
       imageUrl: '/images/zeroToOne.jpg',
-      userId: 'qsomihvqios',
+      
     },
   ];
   res.status(200).json(books);
