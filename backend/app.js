@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const bookRoutes = require('./routes/book');
 const userRoutes = require('./routes/user');
+const path = require('path');
 
 const app = express();
 
@@ -12,6 +13,8 @@ mongoose.connect(process.env.DB_URL)
   .catch((error) => console.log('Connexion à MongoDB échouée !', error));
 
 app.use(express.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
