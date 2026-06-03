@@ -69,3 +69,39 @@ exports.getAllBooks = (req, res, next) => {
     .then(books => res.status(200).json(books))
     .catch(error => res.status(400).json({ error }));
 }
+
+exports.rateBook = (req, res, next) => {
+    const userId = req.auth.userId;
+    const grade = parseInt(req.body.rating, 10);
+
+    if (grade < 0 || grade > 5) {
+        return res.status(400).json({ message: 'La note doit être comprise entre 0 et 5.' });
+    }
+
+    Book.findOne({ _id: req.params.id })
+        .then(book => {
+            const userRating = book.ratings.find(r => r.userId === userId);
+            if (userRating) {
+                return res.status(400).json({ message: 'Vous avez déjà noté ce livre.' });
+            }
+
+            book.ratings.push({ userId: userId, grade: grade });
+
+            const sumRatings = book.ratings.reduce((acc, curr) => acc + curr.grade, 0);
+            book.averageRating = Math.round((sumRatings / book.ratings.length) * 10) / 10;
+
+            book.save()
+                .then(() => res.status(200).json(book))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
+};
+
+exports.getBestRatedBooks = (req, res, next) => {
+    console.log("La route best-rated a été appelée !"); // Ajoutez cette ligne
+    Book.find()
+        .sort({ averageRating: -1 })
+        .limit(3)
+        .then(books => res.status(200).json(books))
+        .catch(error => res.status(400).json({ error }));
+};
