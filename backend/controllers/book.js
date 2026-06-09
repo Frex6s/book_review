@@ -74,7 +74,7 @@ exports.rateBook = (req, res, next) => {
     const userId = req.auth.userId;
     const grade = parseInt(req.body.rating, 10);
 
-    if (grade < 0 || grade > 5) {
+    if (Number.isNaN(grade) || grade < 0 || grade > 5) {
         return res.status(400).json({ message: 'La note doit être comprise entre 0 et 5.' });
     }
 
@@ -98,7 +98,6 @@ exports.rateBook = (req, res, next) => {
 };
 
 exports.getBestRatedBooks = (req, res, next) => {
-    console.log("La route best-rated a été appelée !"); // Ajoutez cette ligne
     Book.find()
         .sort({ averageRating: -1 })
         .limit(3)
