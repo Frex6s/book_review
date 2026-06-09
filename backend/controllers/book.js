@@ -33,6 +33,12 @@ exports.updateBook = (req, res, next) => {
             if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Non autorisé' });
             } else {
+                 if (req.file) {
+                    const oldFilename = book.imageUrl.split('/images/')[1];
+                    fs.unlink(`images/${oldFilename}`, (err) => {
+                        if (err) console.error('Erreur suppression ancienne image :', err);
+                    });
+                }
                 Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'Livre modifié !' }))
                     .catch(error => res.status(401).json({ error }));
@@ -49,6 +55,7 @@ exports.deleteBook =  (req, res, next) => {
             } else {
                 const filename = book.imageUrl.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
+                    if (err) console.error('Erreur suppression image :', err);
                     Book.deleteOne({ _id: req.params.id })
                         .then(() => res.status(200).json({ message: 'Livre supprimé !' }))
                         .catch(error => res.status(400).json({ error }));
